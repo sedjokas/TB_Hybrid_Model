@@ -5,7 +5,7 @@
  *  E-mail: selain.kasereka@unikin.ac.cd
  *  Supervision: Emile-Franc Doungmo Goufo and Ho Tuong Vinh
  *  Description: A hybrid meta-populationnal model that couple ABM and EBM, the dynamics of the disease is managed by 
-    the differential equations solved by the rk4 method in each city. The bihavior of all andividuals is 
+    the differential equations solved by the rk4 method in each city. The bihavior of all individuals is 
     considered separetly and managed by ABM. 
  *  -----------------------------------------------------------
  *  N: Total population 

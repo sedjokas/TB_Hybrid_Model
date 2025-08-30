@@ -43,7 +43,7 @@ global {
 	
 //My population
 	int people <- 10000; //min: 1 max: 100000; //Population
-	float step <- 0.01;//min: 0.0001 max: 0.1; //Step
+	float step_ <- 0.01;//min: 0.0001 max: 0.1; //Step
 	int iInit <- 1;// min: 1 max: 1000; //Initial number of infectious people
 	int NbVille <- 6;// min: 1 max: 50; // Number of city
 	float rate_S <- 0.01;// min: 0.01 max: 100.0; //Rate of creation of Susceptible people
@@ -59,7 +59,7 @@ global {
 	float max_I <- float(iInit);
 	int k <- 0;
 	int temps_Imax <- cycle;
-	
+	bool trip<-false;
 	geometry shape <- square(50);
 	
 	init{
@@ -117,13 +117,13 @@ reflex stop_simulation when: (cycle = 700) {
 reflex save_data when: every(1#cycle){			 	
 		
 		//save the following text into the given text file. Note that each time the save statement is used, a new line is added at the end of the file.
-		save [cycle,sum(ville collect each.S) ,sum(ville collect each.I) ,sum(ville collect each.Le) ,sum(ville collect each.Lf) ,sum(ville collect each.T) ,sum(ville collect each.K) ,sum(ville collect each.R1) ,sum(ville collect each.R2) ] to: "../results/dataAllcity.csv" type:"csv" rewrite: false ;
-		save [cycle,first((ville as list) where (each.compte_ville=0)).S,first((ville as list) where (each.compte_ville=0)).I,first((ville as list) where (each.compte_ville=0)).Le,first((ville as list) where (each.compte_ville=0)).Lf,first((ville as list) where (each.compte_ville=0)).T,first((ville as list) where (each.compte_ville=0)).K,first((ville as list) where (each.compte_ville=0)).R1,first((ville as list) where (each.compte_ville=0)).R2] to: "../results/dataCity1.csv" type:"csv" rewrite: false;
-		save [cycle,first((ville as list) where (each.compte_ville=1)).S,first((ville as list) where (each.compte_ville=1)).I,first((ville as list) where (each.compte_ville=1)).Le,first((ville as list) where (each.compte_ville=1)).Lf,first((ville as list) where (each.compte_ville=1)).T,first((ville as list) where (each.compte_ville=1)).K,first((ville as list) where (each.compte_ville=1)).R1,first((ville as list) where (each.compte_ville=1)).R2] to: "../results/dataCity2.csv" type:"csv" rewrite: false;
-		save [cycle,first((ville as list) where (each.compte_ville=2)).S,first((ville as list) where (each.compte_ville=2)).I,first((ville as list) where (each.compte_ville=2)).Le,first((ville as list) where (each.compte_ville=2)).Lf,first((ville as list) where (each.compte_ville=2)).T,first((ville as list) where (each.compte_ville=2)).K,first((ville as list) where (each.compte_ville=2)).R1,first((ville as list) where (each.compte_ville=2)).R2] to: "../results/dataCity3.csv" type:"csv" rewrite: false;
-		save [cycle,first((ville as list) where (each.compte_ville=3)).S,first((ville as list) where (each.compte_ville=3)).I,first((ville as list) where (each.compte_ville=3)).Le,first((ville as list) where (each.compte_ville=3)).Lf,first((ville as list) where (each.compte_ville=3)).T,first((ville as list) where (each.compte_ville=3)).K,first((ville as list) where (each.compte_ville=3)).R1,first((ville as list) where (each.compte_ville=3)).R2] to: "../results/dataCity4.csv" type:"csv" rewrite: false;
-		save [cycle,first((ville as list) where (each.compte_ville=4)).S,first((ville as list) where (each.compte_ville=4)).I,first((ville as list) where (each.compte_ville=4)).Le,first((ville as list) where (each.compte_ville=4)).Lf,first((ville as list) where (each.compte_ville=4)).T,first((ville as list) where (each.compte_ville=4)).K,first((ville as list) where (each.compte_ville=4)).R1,first((ville as list) where (each.compte_ville=4)).R2] to: "../results/dataCity5.csv" type:"csv" rewrite: false;
-		save [cycle,first((ville as list) where (each.compte_ville=5)).S,first((ville as list) where (each.compte_ville=5)).I,first((ville as list) where (each.compte_ville=5)).Le,first((ville as list) where (each.compte_ville=5)).Lf,first((ville as list) where (each.compte_ville=5)).T,first((ville as list) where (each.compte_ville=5)).K,first((ville as list) where (each.compte_ville=5)).R1,first((ville as list) where (each.compte_ville=5)).R2] to: "../results/dataCity6.csv" type:"csv" rewrite: false;	    	     
+		save [cycle,sum(ville collect each.S) ,sum(ville collect each.I) ,sum(ville collect each.Le) ,sum(ville collect each.Lf) ,sum(ville collect each.T) ,sum(ville collect each.K) ,sum(ville collect each.R1) ,sum(ville collect each.R2) ] to: "../results/dataAllcity.csv" format:"csv" rewrite: false ;
+		save [cycle,first((ville as list) where (each.compte_ville=0)).S,first((ville as list) where (each.compte_ville=0)).I,first((ville as list) where (each.compte_ville=0)).Le,first((ville as list) where (each.compte_ville=0)).Lf,first((ville as list) where (each.compte_ville=0)).T,first((ville as list) where (each.compte_ville=0)).K,first((ville as list) where (each.compte_ville=0)).R1,first((ville as list) where (each.compte_ville=0)).R2] to: "../results/dataCity1.csv" format:"csv" rewrite: false;
+		save [cycle,first((ville as list) where (each.compte_ville=1)).S,first((ville as list) where (each.compte_ville=1)).I,first((ville as list) where (each.compte_ville=1)).Le,first((ville as list) where (each.compte_ville=1)).Lf,first((ville as list) where (each.compte_ville=1)).T,first((ville as list) where (each.compte_ville=1)).K,first((ville as list) where (each.compte_ville=1)).R1,first((ville as list) where (each.compte_ville=1)).R2] to: "../results/dataCity2.csv" format:"csv" rewrite: false;
+		save [cycle,first((ville as list) where (each.compte_ville=2)).S,first((ville as list) where (each.compte_ville=2)).I,first((ville as list) where (each.compte_ville=2)).Le,first((ville as list) where (each.compte_ville=2)).Lf,first((ville as list) where (each.compte_ville=2)).T,first((ville as list) where (each.compte_ville=2)).K,first((ville as list) where (each.compte_ville=2)).R1,first((ville as list) where (each.compte_ville=2)).R2] to: "../results/dataCity3.csv" format:"csv" rewrite: false;
+		save [cycle,first((ville as list) where (each.compte_ville=3)).S,first((ville as list) where (each.compte_ville=3)).I,first((ville as list) where (each.compte_ville=3)).Le,first((ville as list) where (each.compte_ville=3)).Lf,first((ville as list) where (each.compte_ville=3)).T,first((ville as list) where (each.compte_ville=3)).K,first((ville as list) where (each.compte_ville=3)).R1,first((ville as list) where (each.compte_ville=3)).R2] to: "../results/dataCity4.csv" format:"csv" rewrite: false;
+		save [cycle,first((ville as list) where (each.compte_ville=4)).S,first((ville as list) where (each.compte_ville=4)).I,first((ville as list) where (each.compte_ville=4)).Le,first((ville as list) where (each.compte_ville=4)).Lf,first((ville as list) where (each.compte_ville=4)).T,first((ville as list) where (each.compte_ville=4)).K,first((ville as list) where (each.compte_ville=4)).R1,first((ville as list) where (each.compte_ville=4)).R2] to: "../results/dataCity5.csv" format:"csv" rewrite: false;
+		save [cycle,first((ville as list) where (each.compte_ville=5)).S,first((ville as list) where (each.compte_ville=5)).I,first((ville as list) where (each.compte_ville=5)).Le,first((ville as list) where (each.compte_ville=5)).Lf,first((ville as list) where (each.compte_ville=5)).T,first((ville as list) where (each.compte_ville=5)).K,first((ville as list) where (each.compte_ville=5)).R1,first((ville as list) where (each.compte_ville=5)).R2] to: "../results/dataCity6.csv" format:"csv" rewrite: false;	    	     
 	} 
 }
 
@@ -173,7 +173,7 @@ species ville {
 	
 			
 	    reflex solving  {
-    					solve SLeLfITKR1R2 method:rk4 step: step;
+    					solve SLeLfITKR1R2 method:"rk4" step_size: step_;
     					}	
 			
 	aspect voir_ville {
@@ -236,14 +236,15 @@ action creer_homme_in_ville {
 			            is_lost <-  false;
 			            is_trans <-  false;
 			            color <-  rgb('green');
-			            depart<-true;
-			           
+			            if(trip=true){
+			            	depart<-true;
+			            }
  						}					
  					dS<-dS+sain;
  					NSortis<-NSortis+floor(float(sain));
 			}
 			
-//Create infected people and select the reate of travel people based on theier status (I) 
+//Create infected people and select the rate of travel people based on theier status (I) 
  
  			infected<-floor(I*rate_I);
  			// write "inf3    " + I
@@ -261,7 +262,9 @@ action creer_homme_in_ville {
 			            is_lost <-  false;
 			            is_trans <-  false; 
 			            color <-  rgb('red');
-			            depart<-true;
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
             		 }
             		 //set dS<-infected;
@@ -286,7 +289,9 @@ action creer_homme_in_ville {
 			            is_lost <-  false;
 			            is_trans <-  false; 
 			            color <- #blue;
-			            depart<-true;
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				//set dR<-immune;
@@ -313,8 +318,10 @@ action creer_homme_in_ville {
 			            is_immune2 <- true; 
 			            is_lost <- false;
 			            is_trans <- false; 
-			            color <-  rgb(#77B5FE);
-			            depart<-true;
+			            color <-  rgb('black');
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				
@@ -340,7 +347,9 @@ action creer_homme_in_ville {
 			            is_lost <- false;
 			            is_trans <- true; 
 			            color <- #gray;
-			            depart<-true;
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				
@@ -366,7 +375,9 @@ action creer_homme_in_ville {
 			            is_lost <- true;
 			            is_trans <- false; 
 			            color <- #magenta;
-			            depart<-true;
+			            if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				
@@ -390,7 +401,9 @@ action creer_homme_in_ville {
 			            is_lost <- false;
 			            is_trans <- false; 
 			            color <- #orange;
-			            depart<-true;
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				
@@ -418,7 +431,9 @@ action creer_homme_in_ville {
 			            is_lost <- false;
 			            is_trans <- false; 
 			            color <- #yellow;
-			            depart<-true;
+			             if(trip=true){
+			            	depart<-true;
+			            }
 			            
 	 					}
  				
@@ -623,14 +638,15 @@ experiment HybridTB type: gui {
 	parameter 'Nomber of city' type: int var: NbVille category: 'Ville';
 	parameter 'City ID' type: int var: idville_act category: 'Ville'; 
 	
-	// my parameters	   
-	parameter 'Recrutment: Gamma' type: float var: Gamma <- 0.0300 category: "Parameters"; //Recrutment
+	// my parameters
+	parameter 'Travel is permitted' type: bool var: trip category: "Parameters"; //travel
+	parameter 'Recrutment: Gamma' type: float var: Gamma <- 0.300 category: "Parameters"; //Recrutment
 	parameter 'Natural Mortality: mu1' type: float var: mu1 <- 0.0222 category: "Parameters";//rate of mortality related to TB infection  
 	parameter 'Mortality linked to TB: mu2' type: float var: mu2 <- 0.040  category: "Parameters"; //rate of mortality not related to TB infection 0.0003
 	parameter 'Rate of transfer: beta (I->T)' type: float var:beta <- 0.010 category: "Parameters"; //rate of transferred people in a other hospital
 	parameter 'Rate of recovered after treatment: gamma (I->R1)' type: float var:gamma <- 0.84 category: "Parameters"; //rate of recovered after treatment process
 	parameter 'Rate of spontaneously recovered: sigma (I->R2)' type: float var: sigma<-0.25 category: "Parameters"; //rate of spontaneously recovered
-	parameter 'Rate of contact' type: float var:alpha <-0.10 category: "Parameters"; //rate of contact
+	parameter 'Rate of contact' type: float var:alpha <-0.010 category: "Parameters"; //rate of contact
 	parameter 'Rate of transmission: lambda' type: float var: lambda <- 0.10 category: "Parameters"; // rate of transmission
 	parameter 'Proportion of people: p (S-> Le & I)' type: float var: p <- 0.95  category: "Parameters"; // proportion of people
 	parameter 'Rate of progression to ATB: q (Le->I)' type: float var: q <-0.129  category: "Parameters"; // Rate of progression to ATB: q (Le->I)
@@ -649,13 +665,13 @@ experiment HybridTB type: gui {
  // Parametre a manupuler par les utilisateurs
 
 	parameter 'Initial Infected people' var: iInit category: 'Equation SIR'; 
-	parameter 'Step' var: step category: 'Equation SIR';
+	parameter 'Step' var: step_ category: 'Equation SIR';
 			 
 	output { 
 
 // Graphique pour toutes les villes a la fois, donc toute la population
 				
-      display voir refresh_every: 1 {
+      display voir refresh: true {
      // 	 grid model_grid lines: #black;
       	 species homme aspect:voir_hom;
       	 species ville aspect:voir_ville;
@@ -664,7 +680,7 @@ experiment HybridTB type: gui {
 		 		
 		}
 
-		display All_City_Serie refresh_every: 1 {
+		display All_City_Serie refresh: true type:2d{
 			chart "" type: series background: rgb('white') {
 				data 'S' value: sum(ville collect each.S) color: #green ;				
 				data 'I' value: sum(ville collect each.I) color: #red;
@@ -673,11 +689,11 @@ experiment HybridTB type: gui {
 				data 'T' value: sum(ville collect each.T) color: #gray ;
 				data 'K' value: sum(ville collect each.K) color: #magenta ;
 				data 'R1' value: sum(ville collect each.R1) color: #blue ;				
-				data 'R2' value: sum(ville collect each.R2) color: rgb(#77B5FE) ;
+				data 'R2' value: sum(ville collect each.R2) color:  #black ;
 			}
 		}
 		
-		display All_City_Camembert refresh_every: 1 {
+		display All_City_Camembert refresh: true type:2d{
 			chart "CITY 1" type: pie background: rgb('white') {
 				data 'S' value: sum(ville collect each.S) color: #green ;				
 				data 'I' value: sum(ville collect each.I) color: #red;
@@ -686,23 +702,12 @@ experiment HybridTB type: gui {
 				data 'T' value: sum(ville collect each.T) color: #gray ;
 				data 'K' value: sum(ville collect each.K) color: #magenta ;
 				data 'R1' value: sum(ville collect each.R1) color: #blue ;				
-				data 'R2' value: sum(ville collect each.R2) color: rgb(#77B5FE) ;
+				data 'R2' value: sum(ville collect each.R2) color: #skyblue ;
 			}
 		}
 		
-	/*display All_city_camambert refresh_every: 1 {
-			chart "SIR_MATHS_MODEL2" type: pie {
-				data 'S' value: first(statistique).som_S color: #green ;					
-				data 'I' value: first(statistique).som_I color: #red;
-				data 'Le' value: first(statistique).som_Le  color: #orange ;
-				data 'Lf' value: first(statistique).som_Lf color: #yellow ;					
-				data 'T' value: first(statistique).som_T color: #gray ;
-				data 'K' value: first(statistique).som_K color: #magenta ;					
-				data 'R1' value: first(statistique).som_R1 color: #blue;
-				data 'R2' value: first(statistique).som_R2  color: rgb(#77B5FE)  ;
-			}
-		}*/
-			display City_1 refresh_every: 1 {
+		
+			display City_1 refresh: true type:2d {
 			chart "CITY 1" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=0)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=0)).I color:  #red;
@@ -711,11 +716,11 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=0)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=0)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=0)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=0)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=0)).R2 color:  #black  ;
 				
 			}
 		}
-			display City_2 refresh_every: 1 {
+			display City_2 refresh: true type:2d{
 			chart "SIR_MATHS_" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=1)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=1)).I color:  #red;
@@ -724,12 +729,12 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=1)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=1)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=1)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=1)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=1)).R2 color:  #black  ;
 				
 			}
 		}
 			
-	display City_3 refresh_every: 1 {
+	display City_3 refresh: true type:2d{
 			chart "SIR_MATHS_" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=2)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=2)).I color:  #red;
@@ -738,12 +743,12 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=2)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=2)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=2)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=2)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=2)).R2 color:  #black  ;
 				
 			}
 		}
 		
-			display City_4 refresh_every: 1 {
+			display City_4 refresh: true type:2d{
 			chart "SIR_MATHS_" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=3)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=3)).I color:  #red;
@@ -752,11 +757,11 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=3)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=3)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=3)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=3)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=3)).R2 color:  #black  ;
 				
 			}
 		}
-		display City_5 refresh_every: 1 {
+		display City_5 refresh: true type:2d{
 			chart "SIR_MATHS_" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=4)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=4)).I color:  #red;
@@ -765,12 +770,12 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=4)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=4)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=4)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=4)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=4)).R2 color:  #black  ;
 				
 			}
 		}
 	
-	display City_6 refresh_every: 1 {
+	display City_6 refresh: true type:2d{
 			chart "SIR_MATHS_" type: series background: rgb('white')  {
 				data 'S' value: first((ville as list) where (each.compte_ville=5)).S color: #green ;				
 				data 'I' value: first((ville as list) where (each.compte_ville=5)).I color:  #red;
@@ -779,7 +784,7 @@ experiment HybridTB type: gui {
 				data 'T' value: first((ville as list) where (each.compte_ville=5)).T color: #gray ; 
 				data 'K' value: first((ville as list) where (each.compte_ville=5)).K color:  #magenta  ;
 				data 'R1' value: first((ville as list) where (each.compte_ville=5)).R1 color: #blue ;
-				data 'R2' value: first((ville as list) where (each.compte_ville=5)).R2 color: rgb(#77B5FE)  ;
+				data 'R2' value: first((ville as list) where (each.compte_ville=5)).R2 color:  #black  ;
 				
 			}
 		}
